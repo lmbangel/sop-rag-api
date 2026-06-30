@@ -12,7 +12,10 @@ func main() {
 	chunks := services.ChunkText(sText, "rag-test", 200, 100)
 
 	for i, c := range chunks {
-		fmt.Println("CHUNK Index: ", i)
-		fmt.Println(c)
+		fmt.Printf("--- Chunk %d ---\n", i)
+		fmt.Printf("ID: %s\n", c.ID)
+		fmt.Printf("Source: %s\n", c.Source)
+		fmt.Printf("Length: %d characters\n", len([]rune(c.Text)))
+		fmt.Printf("Text: %s\n\n", c.Text)
 	}
 }
