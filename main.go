@@ -11,8 +11,7 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
@@ -29,9 +28,12 @@ func main() {
 	// }
 
 	ctx := context.TODO()
-	// text := "Say this is a test"
-	service := services.NewEmbeddingService(os.Getenv("OPENAI_API_KEY"))
+	s := services.NewEmbeddingService(os.Getenv("OPENAI_API_KEY"))
 
-	res, err := services.GenerateNewEmbeddings(chunks, service, ctx)
-	fmt.Println("Embeddings: ", res)
+	res, err := s.GenerateNewEmbeddings(chunks, ctx)
+	if err != err {
+		fmt.Println("Error: ", err.Error())
+		return
+	}
+	fmt.Println(res)
 }

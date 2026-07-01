@@ -22,11 +22,11 @@ func NewEmbeddingService(apiKey string) *EmbeddingService {
 	return &EmbeddingService{Client: &client}
 }
 
-func GenerateNewEmbeddings(chunks []Chunk, emService *EmbeddingService, ctx context.Context) ([][]float64, error) {
+func (s *EmbeddingService) GenerateNewEmbeddings(chunks []Chunk, ctx context.Context) ([][]float64, error) {
 	var ems [][]float64
 
 	for _, c := range chunks {
-		resp, err := emService.Client.Embeddings.New(ctx, openai.EmbeddingNewParams{
+		resp, err := s.Client.Embeddings.New(ctx, openai.EmbeddingNewParams{
 			Model: openai.EmbeddingModelTextEmbedding3Small,
 			Input: openai.EmbeddingNewParamsInputUnion{OfString: openai.String(c.Text)},
 		})
