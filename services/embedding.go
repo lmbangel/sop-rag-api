@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	_ "context"
 	_ "fmt"
 	_ "os"
@@ -19,4 +20,21 @@ func NewEmbeddingService(apiKey string) *EmbeddingService {
 		option.WithAPIKey(apiKey),
 	)
 	return &EmbeddingService{Client: &client}
+}
+
+func GenerateNewEmbeddings(chunks []Chunk, emService *EmbeddingService, ctx context.Context) ([][]float64, error) {
+	var ems [][]float64
+
+	for _, c := range chunks {
+		resp, err := emService.Client.Embeddings.New(ctx, openai.EmbeddingNewParams{
+			Model: openai.EmbeddingModelTextEmbedding3Small,
+			Input: openai.EmbeddingNewParamsInputUnion{OfString: openai.String(c.Text)},
+		})
+		if err != nil {
+			return nil, err
+		}
+		ems = append(ems, resp.Data[0].Embedding)
+	}
+
+	return ems, nil
 }
